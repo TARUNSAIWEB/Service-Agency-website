@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All-in-One Login & Dashboard</title>
-    <!-- Tailwind CSS CDN for utility classes (added for modern styling consistency) -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         /* --- Combined CSS (style.css + dashboard_style.css + some adjustments) --- */
 
@@ -168,19 +171,49 @@
             font-weight: 700; /* Bold heading */
         }
 
-        .site-header nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1.25rem; /* Adjusted margin */
-            padding: 0.5rem 1rem; /* Adjusted padding */
-            border-radius: 0.375rem; /* Slightly rounded corners */
-            transition: background-color 0.3s ease;
+        /* Dashboard Navigation */
+        .site-header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex; /* For desktop view */
+            align-items: center;
         }
 
-        .site-header nav a:hover,
-        .site-header nav a.active {
-            background-color: #6366f1; /* Indigo for hover/active */
+        .site-header nav ul li {
+            margin-left: 0.5rem; /* Spacing between items */
         }
+        .site-header nav ul li:first-child {
+            margin-left: 0;
+        }
+
+        .site-header nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem; /* Adjusted padding */
+            border-radius: 0.375rem; /* Slightly rounded corners */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: block; /* Make link fill li for better click area */
+        }
+
+        .site-header nav ul li a:hover,
+        .site-header nav ul li a.active { /* Ensure .active class is applied by JS if needed */
+            background-color: #6366f1; /* Indigo for hover/active */
+            color: white;
+        }
+
+        /* Mobile Menu Toggle Button for Dashboard Header */
+        #dashboardMobileMenuToggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem; /* Adjust size as needed */
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-top: 0; /* Reset margin from general button styles */
+            width: auto; /* Reset width from general button styles */
+        }
+
 
         #dashboardPageSection .dashboard-content-area {
             flex-grow: 1;
@@ -189,7 +222,7 @@
             width: 100%; /* Ensure it takes full width for container to center */
         }
 
-        #dashboardPageSection .dashboard-content-area h2 {
+        #dashboardPageSection .dashboard-content-area h2.welcome-message { /* Specific class for welcome message */
             text-align: center;
             color: #333;
             margin-bottom: 2.5rem; /* Adjusted margin */
@@ -219,14 +252,15 @@
         /* Image Slider Styles */
         .slider-container {
             position: relative;
-            max-width: 100%;
+            max-width: 100%; /* Max width of slider within its section */
+            /* max-height: 400px; /* Optional: constrain height */
             margin: auto;
             overflow: hidden;
             border-radius: 0.5rem; /* Rounded corners for slider */
         }
 
         .slide { display: none; }
-        .slide img { width: 100%; height: auto; display: block; border-radius: 0.5rem; }
+        .slide img { width: 100%; height: auto; max-height: 400px; object-fit: cover; display: block; border-radius: 0.5rem; }
         .slide-caption {
             color: #fff; font-size: 1.125rem; /* Adjusted font size */ padding: 0.75rem 1rem; /* Adjusted padding */
             position: absolute; bottom: 0.5rem; width: calc(100% - 1rem); /* Adjusted width for padding */
@@ -242,6 +276,7 @@
         }
         .next { right: 0; border-radius: 0.375rem 0 0 0.375rem; }
         .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
+        .dots-container { text-align:center; margin-top: 10px; } /* Container for dots */
         .dot {
             cursor: pointer; height: 0.75rem; width: 0.75rem; margin: 0 0.25rem; /* Adjusted size and margin */
             background-color: #d1d5db; /* Lighter gray dot */ border-radius: 50%; display: inline-block;
@@ -262,6 +297,7 @@
         #addVehicleForm { /* Form within dashboard */
             padding: 1.5rem; /* Adjusted padding */ border: 1px solid #e5e7eb; /* Lighter border */
             border-radius: 0.5rem; /* Rounded corners */ background-color: #f9fafb; /* Very light gray */
+            margin-top: 1rem; /* Add some space if shown after "Add Vehicle" button */
         }
         #addVehicleForm h4 { margin-top: 0; margin-bottom: 1rem; /* Adjusted margin */ color: #333; font-size: 1.25rem; font-weight: 600; }
         #addVehicleForm .form-group input[type="text"] { width: 100%; } /* Ensure full width within this form */
@@ -287,19 +323,57 @@
             margin-top: 0.75rem; /* Adjusted margin */
             width: auto; /* Override general button width */
         }
+        .vehicle-info-section{
+            margin-top: 80px;
+        }
 
 
         /* Responsive adjustments */
-        @media (max-width: 768px) {
+        @media (max-width: 768px) { /* md breakpoint */
             .site-header .container {
+                flex-direction: row; /* Keep logo and toggle button on same line */
+                justify-content: space-between; /* Space between logo and toggle */
+            }
+            .site-header h1 { margin-bottom: 0; } /* Reset margin if any */
+
+            /* Dashboard Mobile Navigation Menu */
+            .site-header nav {
+                position: relative; /* For positioning the ul */
+            }
+            .site-header nav ul {
+                display: none; /* Hidden by default on mobile */
                 flex-direction: column;
-                align-items: flex-start;
+                position: absolute;
+                top: calc(100% + 0.5rem); /* Position below the header */
+                right: 0; /* Align to the right */
+                background-color: #1f2937; /* Same as header bg */
+                width: 200px; /* Or a suitable width */
+                border-radius: 0.375rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                padding: 0.5rem 0; /* Padding for the ul itself */
+                z-index: 1000; /* Ensure it's on top */
             }
-            .site-header h1 { margin-bottom: 0.75rem; }
-            .site-header nav { width: 100%; }
-            .site-header nav a {
-                display: block; margin-left: 0; margin-bottom: 0.5rem; text-align: center;
+            .site-header nav ul.mobile-menu-active {
+                display: flex; /* Show when active */
             }
+            .site-header nav ul li {
+                margin-left: 0;
+                width: 100%;
+            }
+            .site-header nav ul li a {
+                text-align: left;
+                padding: 0.75rem 1rem; /* Adjust padding for mobile menu items */
+                border-bottom: 1px solid #374151; /* Separator for items */
+            }
+            .site-header nav ul li:last-child a {
+                border-bottom: none;
+            }
+            .site-header nav ul li a:hover,
+            .site-header nav ul li a.active {
+                background-color: #6366f1;
+            }
+
+
             .slide-caption { font-size: 1rem; padding: 0.5rem 0.75rem; }
             .prev, .next { font-size: 1.25rem; padding: 0.75rem; }
 
@@ -314,6 +388,29 @@
             }
         }
 
+        @media (min-width: 769px) { /* Hide mobile toggle on larger screens */
+            #dashboardMobileMenuToggle {
+                display: none;
+            }
+            .site-header nav ul { /* Ensure ul is shown directly on desktop */
+                display: flex !important; /* Override inline style if JS sets display:none */
+                position: static;
+                width: auto;
+                background-color: transparent;
+                box-shadow: none;
+                padding: 0;
+                flex-direction: row;
+            }
+            .site-header nav ul li {
+              width: auto;
+            }
+            .site-header nav ul li a {
+              padding: 0.5rem 1rem;
+              border-bottom: none;
+            }
+        }
+
+
         @media (max-width: 480px) {
             #loginPageSection .login-container { padding: 1.5rem; }
             #loginPageSection .login-container h2 { font-size: 1.75rem; }
@@ -325,10 +422,12 @@
                 padding: 0.625rem;
             }
 
-            #dashboardPageSection .dashboard-content-area h2 { font-size: 1.5rem; }
-            .slider-section h3, .vehicle-info-section h3 { font-size: 1.125rem; }
+            #dashboardPageSection .dashboard-content-area h2.welcome-message { font-size: 1.5rem; }
+            .slider-section h3, .vehicle-info-section h3 {
+                font-size: 1.125rem;
+                padding-top: 10px;
+             }
         }
-
     </style>
 </head>
 <body>
@@ -355,99 +454,140 @@
     </div>
 
     <!-- DASHBOARD PAGE SECTION -->
-    <div id="dashboardPageSection" class="page-section" style="display: none;">
+     <div id="dashboardPageSection" class="page-section" style="display: none;">
         <header class="site-header">
             <div class="container">
-                <h1>My Auto Services</h1>
+                <h1>auto care service</h1>
                 <nav>
-                    <a href="#" id="dashboardNavDashboard" class="active">Dashboard</a>
-                    <a href="#" id="dashboardNavProfile">Profile</a> <!-- Placeholder -->
-                    <a href="#" id="dashboardLogoutButton">Logout</a>
+                    <button id="dashboardMobileMenuToggle" class="md:hidden"> <!-- Hidden on medium screens and up -->
+                        <i class="fas fa-bars"></i> <!-- Font Awesome Bars Icon -->
+                    </button>
+                    <ul id="dashboardNavigationMenu"> <!-- Initially hidden on small screens, shown by JS -->
+                        <li><a href="#dashboardHome" class="active">Home</a></li> <!-- Link to sections within dashboard or placeholder -->
+                        <li><a href="#dashboardServices">Services</a></li>
+                        <li><a href="#dashboardAbout">About Us</a></li>
+                        <li><a href="#dashboardWhyChooseUs">Why Us</a></li>
+                        <li><a href="#dashboardTestimonials">Testimonials</a></li>
+                        <li><a href="#dashboardContact">Contact</a></li>
+                        <li><a href="#" id="dashboardNavProfile">Profile</a></li>
+                        <li><a href="#" id="dashboardLogoutButton">Logout</a></li>
+                    </ul>
                 </nav>
             </div>
         </header>
 
         <main class="dashboard-content-area">
             <div class="container"> <!-- Inner container for content -->
-                <h2>Welcome to Your Dashboard, <span id="dashboardUsername">User</span>!</h2>
+                <h2 class="welcome-message">Welcome to Your Dashboard, <span id="dashboardUsername">User</span>!</h2>
 
                 <!-- Image Slider Section -->
                 <section class="slider-section">
-                    <h3>Our Services</h3>
+                    <h3>Featured Updates</h3>
                     <div class="slider-container">
                         <div class="slide fade">
-                            <img src="https://placehold.co/800x300/007bff/white?text=Full+Engine+Servicing" alt="Engine Servicing">
-                            <div class="slide-caption">Full Engine Servicing</div>
+                            <img src="https://placehold.co/800x400/6366f1/ffffff?text=Exciting+Service+Offer!" alt="Slide 1 - Service Offer">
+                            <div class="slide-caption">Exciting New Service Offer Available!</div>
                         </div>
                         <div class="slide fade">
-                            <img src="https://placehold.co/800x300/28a745/white?text=Tire+Alignment+&+Balancing" alt="Tire Services">
-                            <div class="slide-caption">Tire Alignment & Balancing</div>
+                            <img src="https://placehold.co/800x400/f59e0b/ffffff?text=Maintenance+Tips" alt="Slide 2 - Maintenance Tips">
+                            <div class="slide-caption">Top Maintenance Tips for Your Vehicle</div>
                         </div>
                         <div class="slide fade">
-                            <img src="https://placehold.co/800x300/ffc107/black?text=Oil+Change+&+Filter" alt="Oil Change">
-                            <div class="slide-caption">Oil Change & Filter Replacement</div>
+                            <img src="https://placehold.co/800x400/10b981/ffffff?text=Community+Event" alt="Slide 3 - Community Event">
+                            <div class="slide-caption">Join Our Next Community Auto Care Event</div>
                         </div>
-                        <div class="slide fade">
-                            <img src="https://placehold.co/800x300/dc3545/white?text=Brake+System+Check" alt="Brake Check">
-                            <div class="slide-caption">Comprehensive Brake System Check</div>
-                        </div>
+
                         <a class="prev" onclick="spaPlusSlides(-1)">❮</a>
                         <a class="next" onclick="spaPlusSlides(1)">❯</a>
                     </div>
-                    <div style="text-align:center; margin-top: 10px;">
+                    <div class="dots-container">
                         <span class="dot" onclick="spaCurrentSlide(1)"></span>
                         <span class="dot" onclick="spaCurrentSlide(2)"></span>
                         <span class="dot" onclick="spaCurrentSlide(3)"></span>
-                        <span class="dot" onclick="spaCurrentSlide(4)"></span>
                     </div>
                 </section>
+                 <div class="container mx-auto text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 animate-slide-up rounded-md p-2">Our Services</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in">
+                    <img src="https://placehold.co/100x100/b2e0e0/333333?text=Engine" alt="Engine Repair" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Engine Diagnostics & Repair</h3>
+                    <p class="text-gray-600">Comprehensive engine checks and expert repairs to keep your vehicle running smoothly.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.1s;">
+                    <img src="https://placehold.co/100x100/c7e9b0/333333?text=Oil" alt="Oil Change" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Oil Change & Fluid Check</h3>
+                    <p class="text-gray-600">Regular oil changes and fluid top-ups for optimal performance and longevity.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.2s;">
+                    <img src="https://placehold.co/100x100/f7d9c4/333333?text=Brakes" alt="Brake Service" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Brake System Service</h3>
+                    <p class="text-gray-600">Ensure your safety with our thorough brake inspections and reliable repair services.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.3s;">
+                    <img src="https://placehold.co/100x100/d4e6f1/333333?text=Tires" alt="Tire Services" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Tire Rotation & Alignment</h3>
+                    <p class="text-gray-600">Extend tire life and improve handling with our professional tire services.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.4s;">
+                    <img src="https://placehold.co/100x100/e0c6e0/333333?text=AC" alt="AC Service" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">AC System Recharge & Repair</h3>
+                    <p class="text-gray-600">Stay cool and comfortable with our expert AC system maintenance and repairs.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.5s;">
+                    <img src="https://placehold.co/100x100/f2e8c4/333333?text=Battery" alt="Battery Check" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Battery Check & Replacement</h3>
+                    <p class="text-gray-600">Reliable battery testing and replacement services to ensure your vehicle starts every time.</p>
+                </div>
+            </div>
+        </div>
 
                 <!-- Vehicle Information Section -->
                 <section class="vehicle-info-section">
                     <h3>Your Vehicle Details</h3>
-                    <div id="vehicleDetailsDisplay" class="vehicle-card" style="display: none;">
+
+                    <div id="vehicleDetailsDisplay" style="display: none;" class="vehicle-card">
                         <p><strong>Type:</strong> <span id="displayVehicleType"></span></p>
                         <p><strong>Model:</strong> <span id="displayVehicleModel"></span></p>
                         <p><strong>Number:</strong> <span id="displayVehicleNumber"></span></p>
-                        <button id="editVehicleBtn" class="small-btn button-secondary">Edit Details</button>
+                        <button id="editVehicleBtn" class="button-secondary small-btn">Edit Details</button>
                     </div>
 
-                    <div id="noVehicleMessage" style="display: none;">
-                        <p>You haven't added any vehicle details yet.</p>
-                        <button id="showAddVehicleFormBtn" class="button-primary">Add Your Vehicle</button>
-                    </div>
+                    <p id="noVehicleMessage" style="display: block;">You have not added any vehicle details yet.</p>
+                    <button id="showAddVehicleFormBtn" class="button-primary small-btn">Add Vehicle</button>
 
-                    <form id="addVehicleForm" style="display: none;">
-                        <h4>Add/Update Vehicle Information</h4>
+                    <form id="addVehicleForm" style="display:none;">
+                        <h4>Add/Edit Vehicle</h4>
                         <div class="form-group">
                             <label for="vehicleType">Vehicle Type (e.g., Car, Bike):</label>
-                            <input type="text" id="vehicleType" name="vehicleType" placeholder="e.g., Sedan, SUV, Hatchback">
+                            <input type="text" id="vehicleType" name="vehicleType" placeholder="e.g., Sedan, SUV, Motorcycle" required>
                         </div>
                         <div class="form-group">
                             <label for="modelName">Model Name:</label>
-                            <input type="text" id="modelName" name="modelName" placeholder="e.g., Honda Civic, Yamaha R15">
+                            <input type="text" id="modelName" name="modelName" placeholder="e.g., Toyota Camry, Honda CBR" required>
                         </div>
                         <div class="form-group">
-                            <label for="vehicleNumber">Vehicle Number:</label>
-                            <input type="text" id="vehicleNumber" name="vehicleNumber" placeholder="e.g., MH01AB1234">
+                            <label for="vehicleNumber">Vehicle Number (Plate):</label>
+                            <input type="text" id="vehicleNumber" name="vehicleNumber" placeholder="e.g., ABC-123" required>
                         </div>
                         <div class="form-actions">
-                            <button type="submit">Save Vehicle</button>
+                            <button type="submit" class="button-primary">Save Vehicle</button>
                             <button type="button" id="cancelAddVehicleBtn" class="button-secondary">Cancel</button>
                         </div>
-                        <p id="vehicleFormMessage" class="message"></p>
                     </form>
+                    <p id="vehicleFormMessage" class="message"></p>
                 </section>
             </div>
         </main>
-
+       
         <footer class="site-footer">
             <div class="container">
-                <p>© 2023 My Auto Services. All rights reserved.</p>
+                <p>© <span id="currentYear"></span> Auto Care Service. All rights reserved.</p>
             </div>
         </footer>
     </div>
 
+    
     <script>
         // --- Combined JavaScript (login_script.js + dashboard_script.js + SPA logic) ---
         document.addEventListener('DOMContentLoaded', function() {
@@ -460,10 +600,10 @@
             const loginMessageElement = document.getElementById('loginMessageElement');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
-            const dashboardUsernameSpan = document.getElementById('dashboardUsername');
-
+            
             // --- Dashboard Page Elements ---
-            // Vehicle Info
+            const dashboardUsernameSpan = document.getElementById('dashboardUsername');
+            // Vehicle Info (ensure these IDs exist in the vehicle-info-section)
             const vehicleDetailsDisplay = document.getElementById('vehicleDetailsDisplay');
             const displayVehicleType = document.getElementById('displayVehicleType');
             const displayVehicleModel = document.getElementById('displayVehicleModel');
@@ -478,62 +618,67 @@
             const cancelAddVehicleBtn = document.getElementById('cancelAddVehicleBtn');
             const vehicleFormMessage = document.getElementById('vehicleFormMessage');
             const dashboardLogoutButton = document.getElementById('dashboardLogoutButton');
+            const dashboardMobileMenuToggle = document.getElementById('dashboardMobileMenuToggle');
+            const dashboardNavigationMenu = document.getElementById('dashboardNavigationMenu');
 
-            const localStorageKeyVehicle = 'userVehicleDetails_spa'; // Use a unique key for SPA version
+
+            const localStorageKeyVehicle = 'userVehicleDetails_spa_v2'; // Unique key
+
+            // Update footer year
+            const currentYearSpan = document.getElementById('currentYear');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
 
             // --- SPA Navigation Logic ---
-            /**
-             * Shows the specified page section and hides others.
-             * @param {string} pageId - The ID of the page section to show ('login' or 'dashboard').
-             */
             function showPage(pageId) {
                 loginPageSection.style.display = 'none';
                 dashboardPageSection.style.display = 'none';
 
                 if (pageId === 'login') {
-                    loginPageSection.style.display = 'flex'; // Use flex to center content
+                    loginPageSection.style.display = 'flex';
                 } else if (pageId === 'dashboard') {
-                    dashboardPageSection.style.display = 'flex'; // Use flex for dashboard layout
-                    // Initialize or refresh dashboard specific things if needed
+                    dashboardPageSection.style.display = 'flex';
                     spaLoadVehicleDetails(); // Load vehicle details when dashboard is shown
-                    spaShowSlides(spaSlideIndex); // Ensure slider is correctly displayed
+                    if (document.getElementsByClassName("slide").length > 0) { // Check if slides exist
+                        spaShowSlides(spaSlideIndex); // Initialize slider when dashboard is shown
+                    }
                 }
             }
 
             // --- Login Logic ---
             if (loginForm) {
                 loginForm.addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent default form submission
+                    event.preventDefault();
                     const username = usernameInput.value.trim();
                     const password = passwordInput.value.trim();
 
-                    loginMessageElement.textContent = ''; // Clear previous messages
-                    loginMessageElement.className = 'message'; // Reset classes
+                    loginMessageElement.textContent = '';
+                    loginMessageElement.className = 'message';
 
-                    if (username === 'user' && password === 'password') { // Dummy validation
+                    if (username === 'user' && password === 'password') {
                         loginMessageElement.textContent = `Login successful for ${username}! Redirecting...`;
                         loginMessageElement.classList.add('success');
-                        if (dashboardUsernameSpan) dashboardUsernameSpan.textContent = username; // Set dashboard username
+                        if (dashboardUsernameSpan) dashboardUsernameSpan.textContent = username;
 
                         setTimeout(() => {
-                            showPage('dashboard'); // Transition to dashboard
-                            loginMessageElement.textContent = ''; // Clear login message after redirect
-                            loginForm.reset(); // Reset login form fields
-                        }, 1500); // Wait for 1.5 seconds before redirecting
-                    } else if (!username || !password) { // Check for empty fields
+                            showPage('dashboard');
+                            loginMessageElement.textContent = '';
+                            loginForm.reset();
+                        }, 1500);
+                    } else if (!username || !password) {
                         loginMessageElement.textContent = 'Please enter both username and password.';
                         loginMessageElement.classList.add('error');
-                    } else { // Invalid credentials
+                    } else {
                         loginMessageElement.textContent = 'Invalid username or password. Please try again.';
                         loginMessageElement.classList.add('error');
                     }
 
-                    // Clear error messages after a delay if they are displayed
-                    if (!username || !password || (username !== 'user' || password !== 'password')) {
+                    if (loginMessageElement.classList.contains('error')) {
                         setTimeout(() => {
                             loginMessageElement.textContent = '';
                             loginMessageElement.className = 'message';
-                        }, 5000); // Clear message after 5 seconds
+                        }, 5000);
                     }
                 });
             }
@@ -541,173 +686,165 @@
             // --- Dashboard Logout Logic ---
             if (dashboardLogoutButton) {
                 dashboardLogoutButton.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent default link behavior
-                    // Optionally clear any session-like data from localStorage here if needed
-                    // For a real app, you might also clear the vehicle details:
-                    // localStorage.removeItem(localStorageKeyVehicle);
-                    if (dashboardUsernameSpan) dashboardUsernameSpan.textContent = "User"; // Reset username display
-                    showPage('login'); // Go back to the login page
+                    event.preventDefault();
+                    if (dashboardUsernameSpan) dashboardUsernameSpan.textContent = "User";
+                    showPage('login');
+                    // Hide mobile menu if open
+                    if (dashboardNavigationMenu) dashboardNavigationMenu.classList.remove('mobile-menu-active');
+                });
+            }
+
+            // --- Dashboard Mobile Menu Toggle ---
+            if (dashboardMobileMenuToggle && dashboardNavigationMenu) {
+                dashboardMobileMenuToggle.addEventListener('click', function() {
+                    dashboardNavigationMenu.classList.toggle('mobile-menu-active');
+                });
+                // Optional: Close menu if a nav link is clicked
+                dashboardNavigationMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                            // For actual SPA navigation, you might prevent default and load content
+                            // For now, just close the menu if it's a real link or placeholder
+                        if (link.getAttribute('href') !== '#' || link.id === 'dashboardLogoutButton' || link.id === 'dashboardNavProfile') {
+                               dashboardNavigationMenu.classList.remove('mobile-menu-active');
+                        }
+                    });
                 });
             }
 
 
-            // --- Image Slider Logic (Dashboard - prefixed with spa to avoid conflicts) ---
+            // --- Image Slider Logic (Dashboard - prefixed with spa) ---
             let spaSlideIndex = 1;
 
-            /**
-             * Changes the slide by a given number (n).
-             * @param {number} n - The number of slides to move (e.g., 1 for next, -1 for previous).
-             */
-            window.spaPlusSlides = function(n) { // Expose to global scope for onclick attributes in HTML
+            window.spaPlusSlides = function(n) {
                 spaShowSlides(spaSlideIndex += n);
             }
 
-            /**
-             * Sets the current slide to a specific index.
-             * @param {number} n - The index of the slide to show.
-             */
-            window.spaCurrentSlide = function(n) { // Expose to global scope for onclick attributes in HTML
+            window.spaCurrentSlide = function(n) {
                 spaShowSlides(spaSlideIndex = n);
             }
 
-            /**
-             * Displays the current slide and updates the dots.
-             * @param {number} n - The current slide index.
-             */
             function spaShowSlides(n) {
                 let i;
-                // Query elements dynamically or ensure they are available when this function runs
                 let slides = dashboardPageSection.getElementsByClassName("slide");
                 let dots = dashboardPageSection.getElementsByClassName("dot");
-
-                if (!slides.length || !dots.length) return; // Exit if elements are not found
-
-                // Handle wrapping around the slider
                 if (n > slides.length) { spaSlideIndex = 1 }
                 if (n < 1) { spaSlideIndex = slides.length }
-
-                // Hide all slides
                 for (i = 0; i < slides.length; i++) {
                     slides[i].style.display = "none";
                 }
-                // Deactivate all dots
                 for (i = 0; i < dots.length; i++) {
                     dots[i].className = dots[i].className.replace(" active-dot", "");
                 }
-                // Display the current slide and activate its corresponding dot
-                slides[spaSlideIndex - 1].style.display = "block";
-                dots[spaSlideIndex - 1].className += " active-dot";
+                if (slides.length > 0) { // Only try to display if slides exist
+                    slides[spaSlideIndex-1].style.display = "block";
+                    dots[spaSlideIndex-1].className += " active-dot";
+                }
             }
-            // Auto-cycle slides (optional, uncomment to enable)
-            // setInterval(() => {
-            //     if(dashboardPageSection.style.display !== 'none') { // Only auto-cycle if dashboard is visible
-            //         spaPlusSlides(1);
-            //     }
-            // }, 5000);
 
+            // --- Vehicle Details Logic ---
 
-            // --- Vehicle Information Logic (Dashboard - prefixed with spa) ---
-            /**
-             * Loads vehicle details from local storage and updates the display.
-             */
+            // Function to load vehicle details from local storage and update UI
             function spaLoadVehicleDetails() {
-                const savedDetails = localStorage.getItem(localStorageKeyVehicle);
-                if (savedDetails) {
-                    const vehicle = JSON.parse(savedDetails);
-                    displayVehicleType.textContent = vehicle.type;
-                    displayVehicleModel.textContent = vehicle.model;
-                    displayVehicleNumber.textContent = vehicle.number;
-
-                    vehicleDetailsDisplay.style.display = 'block'; // Show vehicle details
-                    noVehicleMessage.style.display = 'none'; // Hide "no vehicle" message
-                    addVehicleForm.style.display = 'none'; // Hide form
+                const vehicleDetails = JSON.parse(localStorage.getItem(localStorageKeyVehicle));
+                if (vehicleDetails) {
+                    displayVehicleType.textContent = vehicleDetails.type;
+                    displayVehicleModel.textContent = vehicleDetails.model;
+                    displayVehicleNumber.textContent = vehicleDetails.number;
+                    vehicleDetailsDisplay.style.display = 'block';
+                    noVehicleMessage.style.display = 'none';
+                    showAddVehicleFormBtn.style.display = 'none';
+                    addVehicleForm.style.display = 'none'; // Hide form if details are displayed
                 } else {
-                    vehicleDetailsDisplay.style.display = 'none'; // Hide vehicle details
-                    noVehicleMessage.style.display = 'block'; // Show "no vehicle" message
-                    addVehicleForm.style.display = 'none'; // Hide form
+                    vehicleDetailsDisplay.style.display = 'none';
+                    noVehicleMessage.style.display = 'block';
+                    showAddVehicleFormBtn.style.display = 'block';
+                    addVehicleForm.style.display = 'none'; // Ensure form is hidden
                 }
-                spaClearVehicleFormMessage(); // Clear any messages on load
             }
 
-            /**
-             * Shows the add/edit vehicle form and populates it if editing.
-             * @param {boolean} isEditing - True if editing existing details, false for new entry.
-             */
-            function spaShowVehicleForm(isEditing = false) {
-                noVehicleMessage.style.display = 'none';
-                vehicleDetailsDisplay.style.display = 'none';
-                addVehicleForm.style.display = 'block'; // Show the form
-
-                if (isEditing) {
-                    const savedDetails = JSON.parse(localStorage.getItem(localStorageKeyVehicle));
-                    if (savedDetails) {
-                        vehicleTypeInput.value = savedDetails.type;
-                        modelNameInput.value = savedDetails.model;
-                        vehicleNumberInput.value = savedDetails.number;
-                    }
-                } else {
-                    addVehicleForm.reset(); // Clear form fields for new entry
-                }
-                spaClearVehicleFormMessage(); // Clear any previous form messages
+            // Function to save vehicle details to local storage
+            function spaSaveVehicleDetails(type, model, number) {
+                const vehicleDetails = { type, model, number };
+                localStorage.setItem(localStorageKeyVehicle, JSON.stringify(vehicleDetails));
+                spaLoadVehicleDetails(); // Refresh the display
+                showMessage(vehicleFormMessage, 'Vehicle details saved successfully!', 'success');
+                setTimeout(() => {
+                    vehicleFormMessage.textContent = '';
+                    vehicleFormMessage.className = 'message';
+                }, 3000);
             }
 
-            /**
-             * Hides the add/edit vehicle form and reloads vehicle details display.
-             */
-            function spaHideVehicleForm() {
-                addVehicleForm.style.display = 'none'; // Hide the form
-                spaLoadVehicleDetails(); // Refresh vehicle details display
+            // Function to show messages
+            function showMessage(element, message, type) {
+                element.textContent = message;
+                element.className = `message ${type}`;
             }
 
-            /**
-             * Clears the vehicle form message element.
-             */
-            function spaClearVehicleFormMessage() {
-                vehicleFormMessage.textContent = '';
-                vehicleFormMessage.className = 'message'; // Reset classes
-            }
-
-            // Event listeners for vehicle details section
+            // Event listener for "Add Vehicle" button
             if (showAddVehicleFormBtn) {
-                showAddVehicleFormBtn.addEventListener('click', () => spaShowVehicleForm(false)); // Show form for new vehicle
-            }
-            if (editVehicleBtn) {
-                editVehicleBtn.addEventListener('click', () => spaShowVehicleForm(true)); // Show form for editing
-            }
-            if (cancelAddVehicleBtn) {
-                cancelAddVehicleBtn.addEventListener('click', spaHideVehicleForm); // Hide form on cancel
+                showAddVehicleFormBtn.addEventListener('click', function() {
+                    noVehicleMessage.style.display = 'none';
+                    showAddVehicleFormBtn.style.display = 'none';
+                    addVehicleForm.style.display = 'block';
+                    // Clear form fields for new entry
+                    vehicleTypeInput.value = '';
+                    modelNameInput.value = '';
+                    vehicleNumberInput.value = '';
+                    vehicleFormMessage.textContent = '';
+                    vehicleFormMessage.className = 'message';
+                });
             }
 
+            // Event listener for "Edit Details" button
+            if (editVehicleBtn) {
+                editVehicleBtn.addEventListener('click', function() {
+                    const vehicleDetails = JSON.parse(localStorage.getItem(localStorageKeyVehicle));
+                    if (vehicleDetails) {
+                        vehicleTypeInput.value = vehicleDetails.type;
+                        modelNameInput.value = vehicleDetails.model;
+                        vehicleNumberInput.value = vehicleDetails.number;
+                    }
+                    vehicleDetailsDisplay.style.display = 'none';
+                    addVehicleForm.style.display = 'block';
+                    vehicleFormMessage.textContent = '';
+                    vehicleFormMessage.className = 'message';
+                });
+            }
+
+            // Event listener for "Cancel" button in the form
+            if (cancelAddVehicleBtn) {
+                cancelAddVehicleBtn.addEventListener('click', function() {
+                    addVehicleForm.style.display = 'none';
+                    spaLoadVehicleDetails(); // Re-load to show existing details or "Add Vehicle" button
+                    vehicleFormMessage.textContent = '';
+                    vehicleFormMessage.className = 'message';
+                });
+            }
+
+            // Event listener for "Save Vehicle" form submission
             if (addVehicleForm) {
                 addVehicleForm.addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent default form submission
+                    event.preventDefault();
                     const type = vehicleTypeInput.value.trim();
                     const model = modelNameInput.value.trim();
                     const number = vehicleNumberInput.value.trim();
 
                     if (type && model && number) {
-                        const vehicleDetails = { type, model, number };
-                        localStorage.setItem(localStorageKeyVehicle, JSON.stringify(vehicleDetails)); // Save to local storage
-
-                        vehicleFormMessage.textContent = 'Vehicle details saved successfully!';
-                        vehicleFormMessage.className = 'message success';
-
-                        setTimeout(() => {
-                            spaHideVehicleForm(); // Hide form and refresh display after success
-                        }, 1500);
-
+                        spaSaveVehicleDetails(type, model, number);
+                        addVehicleForm.style.display = 'none'; // Hide form after saving
                     } else {
-                        vehicleFormMessage.textContent = 'Please fill in all vehicle fields.';
-                        vehicleFormMessage.className = 'message error';
-                        setTimeout(() => { spaClearVehicleFormMessage(); }, 3000); // Clear error after 3 seconds
+                        showMessage(vehicleFormMessage, 'Please fill in all vehicle details.', 'error');
+                        setTimeout(() => {
+                            vehicleFormMessage.textContent = '';
+                            vehicleFormMessage.className = 'message';
+                        }, 5000);
                     }
                 });
             }
 
-            // --- Initial Page Load ---
-            showPage('login'); // Start with the login page when the DOM is fully loaded
+            // Initial page load
+            showPage('login');
         });
     </script>
-
 </body>
 </html>
