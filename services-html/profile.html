@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - AutoCare Hub</title>
+    <!-- Remove this link: <link rel="stylesheet" href="style.css"> -->
+    <!-- Simple icon library (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* PASTE ALL THE CSS CODE FROM style.css HERE */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        header h1 i {
+            margin-right: 8px;
+        }
+
+        header nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        header nav a:hover, header nav a.active {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        /* Main Profile Page */
+        .profile-page {
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        /* Profile Header Section */
+        .profile-header {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff; /* Optional: for a nice border effect */
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .edit-avatar-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .user-info-summary h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .user-info-summary p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .user-info-summary p i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+
+        /* General Section Styling */
+        section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.4em;
+        }
+        .section-header h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .view-all-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #7f8c8d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #6c7a7b;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 0.8em;
+        }
+
+
+        /* My Vehicles Section */
+        .vehicle-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .vehicle-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            text-align: center; /* Center content if you like */
+        }
+
+        .vehicle-image {
+            width: 100%;
+            max-height: 200px; /* Control image height */
+            object-fit: cover; /* Ensure image covers area nicely */
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .vehicle-card h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .vehicle-card p {
+            font-size: 0.9em;
+            margin: 5px 0;
+            color: #555;
+        }
+        .vehicle-card p strong {
+            color: #333;
+        }
+
+        .vehicle-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center; /* or space-around */
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+
+        /* Upcoming Appointments */
+        .appointment-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .appointment-list li {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* For responsiveness */
+        }
+        .appointment-list li:last-child {
+            border-bottom: none;
+        }
+
+        .appointment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px; /* Space between items */
+            flex-grow: 1; /* Take available space */
+        }
+        .appointment-date {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .appointment-service {
+            color: #333;
+        }
+        .appointment-vehicle {
+            font-size: 0.9em;
+            color: #777;
+        }
+        .appointment-actions {
+            margin-top: 10px; /* Add margin for small screens */
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Service History Table */
+        .service-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .service-table th, .service-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .service-table th {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .service-table td a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .service-table td a:hover {
+            text-decoration: underline;
+        }
+        .service-table td i {
+            margin-right: 5px;
+        }
+
+        /* Account Settings */
+        .account-settings ul {
+            list-style: none;
+            padding: 0;
+        }
+        .account-settings ul li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .account-settings ul li:last-child {
+            border-bottom: none;
+        }
+        .account-settings ul li a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 500;
+        }
+        .account-settings ul li a:hover {
+            text-decoration: underline;
+        }
+        .account-settings ul li i {
+            margin-right: 10px;
+            width: 20px; /* Align icons */
+            text-align: center;
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            grid-column: 1 / -1; /* Make it span all columns in grid */
+        }
+        .empty-state p {
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c2833;
+            color: #aaa;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            header nav {
+                margin-top: 10px;
+            }
+            header nav a {
+                margin-left: 0;
+                margin-right: 10px;
+                display: inline-block;
+                margin-bottom: 5px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .user-info-summary .edit-profile-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .appointment-list li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .appointment-actions {
+                width: 100%;
+                margin-top: 10px;
+            }
+            .appointment-actions .btn {
+                flex-grow: 1; /* Make buttons take equal space */
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .vehicle-list {
+                grid-template-columns: 1fr; /* Stack vehicle cards */
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .section-header .btn, .section-header .view-all-link {
+                align-self: flex-start;
+            }
+            .service-table {
+                font-size: 0.8em; /* Smaller text for small tables */
+            }
+            .service-table th, .service-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-tools"></i> AutoCare Hub</h1>
+            <nav>
+                <a href="#">Dashboard</a>
+                <a href="#">Book Service</a>
+                <a href="#" class="active">My Profile</a>
+                <a href="#">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container profile-page">
+        <section class="profile-header">
+            <div class="avatar-container">
+                <img src="https://via.placeholder.com/150" alt="User Avatar" class="avatar">
+                <button class="edit-avatar-btn"><i class="fas fa-camera"></i></button>
+            </div>
+            <div class="user-info-summary">
+                <h2>John Doe</h2>
+                <p><i class="fas fa-envelope"></i> john.doe@example.com</p>
+                <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Main St, Anytown, USA</p>
+                <button class="btn btn-primary edit-profile-btn"><i class="fas fa-edit"></i> Edit Profile</button>
+            </div>
+        </section>
+
+        <section class="my-vehicles">
+            <div class="section-header">
+                <h3><i class="fas fa-car"></i> My Vehicles</h3>
+                <button class="btn btn-secondary add-vehicle-btn"><i class="fas fa-plus-circle"></i> Add Vehicle</button>
+            </div>
+            <div class="vehicle-list">
+                <!-- Vehicle Card 1 -->
+                <div class="vehicle-card">
+                    <img src="https://via.placeholder.com/300x200/cccccc/000000?text=Sedan+Image" alt="Vehicle Image" class="vehicle-image">
+                    <h4>2021 Toyota Camry</h4>
+                    <p><strong>VIN:</strong> JT123ABC456DEF789</p>
+                    <p><strong>License Plate:</strong> ABC-123</p>
+                    <p><strong>Mileage:</strong> 35,000 miles</p>
+                    <div class="vehicle-actions">
+                        <button class="btn btn-sm"><i class="fas fa-history"></i> Service History</button>
+                        <button class="btn btn-sm btn-edit-vehicle"><i class="fas fa-pencil-alt"></i> Edit</button>
+                        <button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Remove</button>
+                    </div>
+                </div>
+                <!-- Vehicle Card 2 -->
+                <div class="vehicle-card">
+                    <img src="https://via.placeholder.com/300x200/dddddd/000000?text=SUV+Image" alt="Vehicle Image" class="vehicle-image">
+                    <h4>2020 Ford Explorer</h4>
+                    <p><strong>VIN:</strong> 1FM5K8D80LGA12345</p>
+                    <p><strong>License Plate:</strong> XYZ-789</p>
+                    <p><strong>Mileage:</strong> 52,700 miles</p>
+                    <div class="vehicle-actions">
+                        <button class="btn btn-sm"><i class="fas fa-history"></i> Service History</button>
+                        <button class="btn btn-sm btn-edit-vehicle"><i class="fas fa-pencil-alt"></i> Edit</button>
+                        <button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Remove</button>
+                    </div>
+                </div>
+                 <!-- Placeholder for when no vehicles are added -->
+                <!--
+                <div class="empty-state">
+                    <p>You haven't added any vehicles yet.</p>
+                    <button class="btn btn-secondary"><i class="fas fa-plus-circle"></i> Add Your First Vehicle</button>
+                </div>
+                -->
+            </div>
+        </section>
+
+        <section class="upcoming-appointments">
+            <div class="section-header">
+                <h3><i class="fas fa-calendar-alt"></i> Upcoming Appointments</h3>
+                 <a href="#" class="view-all-link">View All</a>
+            </div>
+            <ul class="appointment-list">
+                <li>
+                    <div class="appointment-details">
+                        <span class="appointment-date">Oct 28, 2023 - 10:00 AM</span>
+                        <span class="appointment-service">Oil Change & Tire Rotation</span>
+                        <span class="appointment-vehicle">2021 Toyota Camry</span>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="btn btn-sm">Reschedule</button>
+                        <button class="btn btn-sm btn-danger">Cancel</button>
+                    </div>
+                </li>
+                <!-- Placeholder for when no appointments -->
+                <!--
+                <li class="empty-state">
+                    <p>No upcoming appointments.</p>
+                    <a href="#" class="btn btn-primary">Book a Service</a>
+                </li>
+                -->
+            </ul>
+        </section>
+
+        <section class="service-history-summary">
+            <div class="section-header">
+                <h3><i class="fas fa-wrench"></i> Recent Service History</h3>
+                <a href="#" class="view-all-link">View Full History</a>
+            </div>
+            <table class="service-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Vehicle</th>
+                        <th>Service Type</th>
+                        <th>Provider</th>
+                        <th>Cost</th>
+                        <th>Invoice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sep 15, 2023</td>
+                        <td>2021 Toyota Camry</td>
+                        <td>Brake Pad Replacement</td>
+                        <td>AutoCare Downtown</td>
+                        <td>$250.00</td>
+                        <td><a href="#"><i class="fas fa-file-invoice"></i> View</a></td>
+                    </tr>
+                    <tr>
+                        <td>Jul 01, 2023</td>
+                        <td>2020 Ford Explorer</td>
+                        <td>Annual Inspection</td>
+                        <td>Quick Lube & Tune</td>
+                        <td>$75.00</td>
+                        <td><a href="#"><i class="fas fa-file-invoice"></i> View</a></td>
+                    </tr>
+                    <!-- Placeholder for when no history -->
+                    <!--
+                    <tr>
+                        <td colspan="6" class="empty-state">No service history found.</td>
+                    </tr>
+                    -->
+                </tbody>
+            </table>
+        </section>
+
+        <section class="account-settings">
+             <h3><i class="fas fa-cog"></i> Account Settings</h3>
+             <ul>
+                 <li><a href="#"><i class="fas fa-key"></i> Change Password</a></li>
+                 <li><a href="#"><i class="fas fa-user-edit"></i> Edit Contact Information</a></li>
+                 <li><a href="#"><i class="fas fa-bell"></i> Notification Preferences</a></li>
+                 <li><a href="#"><i class="fas fa-credit-card"></i> Manage Payment Methods</a></li>
+             </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 AutoCare Hub. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

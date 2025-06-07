@@ -10,9 +10,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* --- Combined CSS (style.css + dashboard_style.css + some adjustments) --- */
+        /* --- Base & Utilities --- */
+        @property --angle {
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: false;
+        }
 
-        /* Basic Reset */
         * {
             margin: 0;
             padding: 0;
@@ -20,143 +24,197 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif; /* Changed to Inter for consistency with previous responses */
-            background-color: #f0f2f5; /* Light gray background, consistent with previous responses */
+            font-family: 'Inter', sans-serif;
             color: #333;
-            /* Removed flex centering for body as sections will control their layout */
+            background-color: #f0f2f5; /* Default background for dashboard */
         }
 
+        /* --- Page Section Containers --- */
         .page-section {
             min-height: 100vh;
             display: flex;
-            flex-direction: column; /* For header/footer structure within sections */
+            flex-direction: column;
         }
 
-        .content-wrapper {
-            display: flex;
+        /* --- Login Page Specific Styles --- */
+        #loginPageSection {
+            background-color: #000; /* Dark background for login page */
             justify-content: center;
             align-items: center;
-            flex-grow: 1; /* Takes up space between header and footer */
-            padding: 20px;
         }
 
-
-        /* --- Login Page Styles (from style.css) --- */
-        #loginPageSection .login-container { /* Specific to login page */
-            background-color: #ffffff;
-            padding: 2.5rem; /* Adjusted for consistency with previous login page padding */
-            border-radius: 1rem; /* Adjusted for consistency */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Adjusted for consistency */
+        .login-container {
+            background-color: #111827; /* Dark gray (Tailwind gray-900) */
+            padding: 30px 40px;
+            border-radius: 8px;
             width: 100%;
             max-width: 400px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1; /* Ensure content is above pseudo-elements */
+        }
+        
+        /* Animated Border for Login Container */
+        .login-container::after,
+        .login-container::before {
+            --angle: 0deg;
+            content: '';
+            position: absolute;
+            inset: -4px; /* Controls border thickness */
+            background: conic-gradient(from var(--angle),
+                transparent 75%,
+                #6366f1 /* Indigo color to match dashboard theme */
+            );
+            border-radius: 12px;
+            z-index: -1;
+            animation: rotate 4s linear infinite;
         }
 
-        #loginPageSection .login-container h2 {
+        .login-container::before {
+            filter: blur(1.5rem);
+            opacity: 0.8;
+        }
+
+        @keyframes rotate {
+            to {
+                --angle: 360deg;
+            }
+        }
+
+        #loginPageSection h2 {
             text-align: center;
-            margin-bottom: 2rem; /* Adjusted for consistency */
-            color: #333;
-            font-size: 2.25rem; /* Adjusted for consistency */
-            font-weight: 700; /* Adjusted for consistency */
+            color: #f9fafb; /* Light gray text */
+            margin-bottom: 25px;
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+        
+        #loginPageSection .form-group label {
+            color: #d1d5db; /* Lighter gray for labels */
+        }
+        
+        #loginPageSection .form-group input {
+            background-color: #374151; /* Medium gray */
+            color: #f9fafb;
+            border: 1px solid #4b5563; /* Darker border */
+        }
+        
+        #loginPageSection .form-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
         }
 
-        .form-group { /* Common form group style */
-            margin-bottom: 1.5rem; /* Adjusted for consistency */
+        /* --- Shared Form, Button, and Message Styles --- */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem; /* Adjusted for consistency */
-            font-weight: 500; /* Adjusted for consistency */
+            margin-bottom: 0.5rem;
+            font-weight: 500;
             color: #555;
-            font-size: 1rem; /* Adjusted for consistency */
+            font-size: 1rem;
         }
 
         .form-group input[type="text"],
         .form-group input[type="password"],
-        .form-group input[type="email"] /* Added for potential future use */
-        {
+        .form-group input[type="email"],
+        .form-group input[type="tel"] {
             width: 100%;
-            padding: 0.75rem 1rem; /* Adjusted for consistency */
-            border: 1px solid #d1d5db; /* Adjusted for consistency */
-            border-radius: 0.5rem; /* Adjusted for consistency */
-            font-size: 1rem; /* Adjusted for consistency */
-            color: #333; /* Adjusted for consistency */
-            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Added transition */
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #333;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
         .form-group input[type="text"]:focus,
         .form-group input[type="password"]:focus,
-        .form-group input[type="email"]:focus {
+        .form-group input[type="email"]:focus,
+        .form-group input[type="tel"]:focus {
             outline: none;
-            border-color: #6366f1; /* Adjusted for consistency */
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* Adjusted for consistency */
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .interactive-link {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #818cf8; /* Lighter Indigo for dark background */
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .interactive-link:hover {
+            text-decoration: underline;
         }
 
-        /* Common button styles - can be overridden by more specific ones */
         button, .button-primary {
             width: 100%;
-            padding: 0.85rem 1.5rem; /* Adjusted for consistency */
-            background-color: #6366f1; /* Adjusted for consistency */
+            padding: 0.85rem 1.5rem;
+            background-color: #6366f1;
             color: white;
             border: none;
-            border-radius: 0.5rem; /* Adjusted for consistency */
-            font-size: 1.125rem; /* Adjusted for consistency */
-            font-weight: 600; /* Adjusted for consistency */
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out; /* Adjusted for consistency */
-            margin-top: 1.5rem; /* Added for consistency */
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            margin-top: 1.5rem;
         }
 
         button:hover, .button-primary:hover {
-            background-color: #4f46e5; /* Adjusted for consistency */
-            transform: translateY(-2px); /* Adjusted for consistency */
+            background-color: #4f46e5;
+            transform: translateY(-2px);
         }
         button:active, .button-primary:active {
-            transform: translateY(0); /* Adjusted for consistency */
+            transform: translateY(0);
         }
 
-        /* Message styling */
         .message {
-            margin-top: 1.5rem; /* Adjusted for consistency */
-            padding: 0.75rem; /* Adjusted for consistency */
-            border-radius: 0.5rem; /* Adjusted for consistency */
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
             text-align: center;
-            font-size: 1rem; /* Adjusted for consistency */
-            font-weight: 500; /* Adjusted for consistency */
-            border: 1px solid transparent; /* Base for border */
+            font-size: 1rem;
+            font-weight: 500;
+            border: 1px solid transparent;
         }
 
         .message.success {
-            background-color: #dcfce7; /* Adjusted for consistency */
-            color: #16a34a; /* Adjusted for consistency */
-            border-color: #86efac; /* Adjusted for consistency */
+            background-color: #dcfce7;
+            color: #16a34a;
+            border-color: #86efac;
         }
 
         .message.error {
-            background-color: #fee2e2; /* Adjusted for consistency */
-            color: #dc2626; /* Adjusted for consistency */
-            border-color: #fca5a5; /* Adjusted for consistency */
+            background-color: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
         }
 
 
-        /* --- Dashboard Page Styles (from dashboard_style.css) --- */
-        .container { /* Re-usable container for content centering within dashboard sections */
+        /* --- Dashboard Page Styles --- */
+        .container {
             width: 90%;
             max-width: 1100px;
             margin: 0 auto;
-            padding: 0 15px; /* Adjusted for better spacing within sections */
+            padding: 0 15px;
         }
 
-        /* Header & Footer Styles (common for dashboard) */
         .site-header, .site-footer {
-            background-color: #1f2937; /* Darker gray for header/footer (Tailwind's gray-800) */
+            background-color: #1f2937;
             color: white;
-            padding: 1rem 0; /* Adjusted padding */
-            width: 100%; /* Ensure full width */
+            padding: 1rem 0;
+            width: 100%;
         }
-        .site-header { box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .site-footer { text-align: center; margin-top: auto; } /* Pushes footer to bottom if content is short */
-        .site-footer p { margin: 0; font-size: 0.875rem; /* Adjusted font size */ color: #d1d5db; /* Lighter gray */ }
+        .site-header { box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
+        .site-footer { text-align: center; margin-top: auto; }
+        .site-footer p { margin: 0; font-size: 0.875rem; color: #d1d5db; }
 
 
         .site-header .container {
@@ -168,265 +226,176 @@
         .site-header h1 {
             margin: 0;
             font-size: 1.8em;
-            font-weight: 700; /* Bold heading */
+            font-weight: 700;
         }
 
-        /* Dashboard Navigation */
         .site-header nav ul {
             list-style: none;
             padding: 0;
             margin: 0;
-            display: flex; /* For desktop view */
+            display: flex;
             align-items: center;
         }
 
-        .site-header nav ul li {
-            margin-left: 0.5rem; /* Spacing between items */
-        }
-        .site-header nav ul li:first-child {
-            margin-left: 0;
-        }
+        .site-header nav ul li { margin-left: 0.5rem; }
+        .site-header nav ul li:first-child { margin-left: 0; }
 
         .site-header nav ul li a {
             color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem; /* Adjusted padding */
-            border-radius: 0.375rem; /* Slightly rounded corners */
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
             transition: background-color 0.3s ease, color 0.3s ease;
-            display: block; /* Make link fill li for better click area */
+            display: block;
         }
 
         .site-header nav ul li a:hover,
-        .site-header nav ul li a.active { /* Ensure .active class is applied by JS if needed */
-            background-color: #6366f1; /* Indigo for hover/active */
+        .site-header nav ul li a.active {
+            background-color: #6366f1;
             color: white;
         }
 
-        /* Mobile Menu Toggle Button for Dashboard Header */
         #dashboardMobileMenuToggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem; /* Adjust size as needed */
-            cursor: pointer;
-            padding: 0.5rem;
-            margin-top: 0; /* Reset margin from general button styles */
-            width: auto; /* Reset width from general button styles */
+            background: none; border: none; color: white;
+            font-size: 1.5rem; cursor: pointer; padding: 0.5rem;
+            margin-top: 0; width: auto;
         }
-
 
         #dashboardPageSection .dashboard-content-area {
             flex-grow: 1;
-            padding-top: 2rem; /* Adjusted padding */
-            padding-bottom: 2rem; /* Adjusted padding */
-            width: 100%; /* Ensure it takes full width for container to center */
+            padding: 2rem 0;
+            width: 100%;
         }
 
-        #dashboardPageSection .dashboard-content-area h2.welcome-message { /* Specific class for welcome message */
-            text-align: center;
-            color: #333;
-            margin-bottom: 2.5rem; /* Adjusted margin */
-            font-size: 2rem; /* Adjusted font size */
-            font-weight: 700; /* Bold heading */
+        #dashboardPageSection .dashboard-content-area h2.welcome-message {
+            text-align: center; color: #333; margin-bottom: 2.5rem;
+            font-size: 2rem; font-weight: 700;
         }
 
-        /* Section Styling on Dashboard */
-        .slider-section, .vehicle-info-section {
+        .slider-section, .vehicle-info-section, .services-section, .contact-section {
             background-color: #ffffff;
-            padding: 2rem; /* Adjusted padding */
-            border-radius: 0.75rem; /* More rounded corners */
+            padding: 2rem;
+            border-radius: 0.75rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 2rem; /* Adjusted margin */
+            margin-bottom: 2rem;
         }
+        .services-section, .contact-section { background: none; box-shadow: none; padding: 0;}
+
 
         .slider-section h3, .vehicle-info-section h3 {
-            color: #6366f1; /* Indigo for section headings */
-            margin-top: 0;
-            margin-bottom: 1.25rem; /* Adjusted margin */
-            border-bottom: 2px solid #e5e7eb; /* Lighter border */
-            padding-bottom: 0.75rem; /* Adjusted padding */
-            font-size: 1.5rem; /* Adjusted font size */
-            font-weight: 600; /* Semi-bold */
+            color: #6366f1; margin-top: 0; margin-bottom: 1.25rem;
+            border-bottom: 2px solid #e5e7eb; padding-bottom: 0.75rem;
+            font-size: 1.5rem; font-weight: 600;
         }
 
-        /* Image Slider Styles */
         .slider-container {
-            position: relative;
-            max-width: 100%; /* Max width of slider within its section */
-            /* max-height: 400px; /* Optional: constrain height */
-            margin: auto;
-            overflow: hidden;
-            border-radius: 0.5rem; /* Rounded corners for slider */
+            position: relative; max-width: 100%; margin: auto;
+            overflow: hidden; border-radius: 0.5rem;
         }
 
         .slide { display: none; }
         .slide img { width: 100%; height: auto; max-height: 400px; object-fit: cover; display: block; border-radius: 0.5rem; }
         .slide-caption {
-            color: #fff; font-size: 1.125rem; /* Adjusted font size */ padding: 0.75rem 1rem; /* Adjusted padding */
-            position: absolute; bottom: 0.5rem; width: calc(100% - 1rem); /* Adjusted width for padding */
-            left: 0.5rem; /* Added left for padding */
-            text-align: center; background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
-            border-radius: 0.375rem; /* Rounded corners for caption */
+            color: #fff; font-size: 1.125rem; padding: 0.75rem 1rem;
+            position: absolute; bottom: 0.5rem; width: calc(100% - 1rem);
+            left: 0.5rem; text-align: center; background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 0.375rem;
         }
         .prev, .next {
             cursor: pointer; position: absolute; top: 50%; width: auto;
-            padding: 1rem; /* Adjusted padding */ margin-top: -1.5rem; /* Adjusted margin */ color: white; font-weight: bold;
-            font-size: 1.5rem; /* Adjusted font size */ transition: 0.6s ease; border-radius: 0 0.375rem 0.375rem 0; /* Adjusted border radius */
-            user-select: none; background-color: rgba(0,0,0,0.4); /* Slightly darker background */
+            padding: 1rem; margin-top: -1.5rem; color: white; font-weight: bold;
+            font-size: 1.5rem; transition: 0.6s ease; border-radius: 0 0.375rem 0.375rem 0;
+            user-select: none; background-color: rgba(0,0,0,0.4);
         }
         .next { right: 0; border-radius: 0.375rem 0 0 0.375rem; }
         .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
-        .dots-container { text-align:center; margin-top: 10px; } /* Container for dots */
+        .dots-container { text-align:center; margin-top: 10px; }
         .dot {
-            cursor: pointer; height: 0.75rem; width: 0.75rem; margin: 0 0.25rem; /* Adjusted size and margin */
-            background-color: #d1d5db; /* Lighter gray dot */ border-radius: 50%; display: inline-block;
+            cursor: pointer; height: 0.75rem; width: 0.75rem; margin: 0 0.25rem;
+            background-color: #d1d5db; border-radius: 50%; display: inline-block;
             transition: background-color 0.6s ease;
         }
-        .active-dot, .dot:hover { background-color: #6366f1; /* Indigo active/hover dot */ }
+        .active-dot, .dot:hover { background-color: #6366f1; }
         .fade { animation-name: fade; animation-duration: 1.5s; }
         @keyframes fade { from {opacity: .4} to {opacity: 1} }
 
-        /* Vehicle Info & Form Styles */
         .vehicle-card {
-            background-color: #e0e7ff; /* Lighter indigo background */ border: 1px solid #c7d2fe; /* Lighter indigo border */
-            padding: 1.25rem; /* Adjusted padding */ border-radius: 0.5rem; /* Rounded corners */ margin-bottom: 1.5rem; /* Adjusted margin */
+            background-color: #e0e7ff; border: 1px solid #c7d2fe;
+            padding: 1.25rem; border-radius: 0.5rem; margin-bottom: 1.5rem;
         }
         .vehicle-card p { margin: 0.5rem 0; color: #333; }
-        .vehicle-card strong { color: #4338ca; /* Darker indigo for strong text */ }
+        .vehicle-card strong { color: #4338ca; }
 
-        #addVehicleForm { /* Form within dashboard */
-            padding: 1.5rem; /* Adjusted padding */ border: 1px solid #e5e7eb; /* Lighter border */
-            border-radius: 0.5rem; /* Rounded corners */ background-color: #f9fafb; /* Very light gray */
-            margin-top: 1rem; /* Add some space if shown after "Add Vehicle" button */
+        #addVehicleForm {
+            padding: 1.5rem; border: 1px solid #e5e7eb;
+            border-radius: 0.5rem; background-color: #f9fafb;
+            margin-top: 1rem;
         }
-        #addVehicleForm h4 { margin-top: 0; margin-bottom: 1rem; /* Adjusted margin */ color: #333; font-size: 1.25rem; font-weight: 600; }
-        #addVehicleForm .form-group input[type="text"] { width: 100%; } /* Ensure full width within this form */
-
-
+        #addVehicleForm h4 { margin-top: 0; margin-bottom: 1rem; color: #333; font-size: 1.25rem; font-weight: 600; }
+        
         .form-actions {
-            margin-top: 1.5rem; /* Adjusted margin */
+            margin-top: 1.5rem;
             display: flex;
-            gap: 0.75rem; /* Adjusted gap */
+            gap: 0.75rem;
         }
-        /* Specific button styling within form-actions if needed, or use general button styles */
-        .form-actions button { width: auto; /* Allow buttons to size naturally or set specific widths */ }
+        .form-actions button { width: auto; }
 
         .button-secondary {
-            background-color: #6b7280; /* Tailwind's gray-500 */
+            background-color: #6b7280;
         }
         .button-secondary:hover {
-            background-color: #4b5563; /* Tailwind's gray-700 */
+            background-color: #4b5563;
         }
         .small-btn {
-            font-size: 0.875rem; /* Smaller font size */
-            padding: 0.5rem 0.75rem; /* Smaller padding */
-            margin-top: 0.75rem; /* Adjusted margin */
-            width: auto; /* Override general button width */
+            font-size: 0.875rem; padding: 0.5rem 0.75rem;
+            margin-top: 0.75rem; width: auto;
         }
-        .vehicle-info-section{
-            margin-top: 80px;
-        }
-
 
         /* Responsive adjustments */
-        @media (max-width: 768px) { /* md breakpoint */
+        @media (max-width: 768px) {
             .site-header .container {
-                flex-direction: row; /* Keep logo and toggle button on same line */
-                justify-content: space-between; /* Space between logo and toggle */
+                flex-direction: row; justify-content: space-between;
             }
-            .site-header h1 { margin-bottom: 0; } /* Reset margin if any */
-
-            /* Dashboard Mobile Navigation Menu */
-            .site-header nav {
-                position: relative; /* For positioning the ul */
-            }
+            .site-header h1 { margin-bottom: 0; }
+            .site-header nav { position: relative; }
             .site-header nav ul {
-                display: none; /* Hidden by default on mobile */
-                flex-direction: column;
-                position: absolute;
-                top: calc(100% + 0.5rem); /* Position below the header */
-                right: 0; /* Align to the right */
-                background-color: #1f2937; /* Same as header bg */
-                width: 200px; /* Or a suitable width */
-                border-radius: 0.375rem;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                padding: 0.5rem 0; /* Padding for the ul itself */
-                z-index: 1000; /* Ensure it's on top */
-            }
-            .site-header nav ul.mobile-menu-active {
-                display: flex; /* Show when active */
-            }
-            .site-header nav ul li {
-                margin-left: 0;
-                width: 100%;
-            }
-            .site-header nav ul li a {
-                text-align: left;
-                padding: 0.75rem 1rem; /* Adjust padding for mobile menu items */
-                border-bottom: 1px solid #374151; /* Separator for items */
-            }
-            .site-header nav ul li:last-child a {
-                border-bottom: none;
-            }
-            .site-header nav ul li a:hover,
-            .site-header nav ul li a.active {
-                background-color: #6366f1;
-            }
-
-
-            .slide-caption { font-size: 1rem; padding: 0.5rem 0.75rem; }
-            .prev, .next { font-size: 1.25rem; padding: 0.75rem; }
-
-            .form-actions {
-                flex-direction: column;
-            }
-            .form-actions button {
-                width: 100%; /* Stack buttons in form actions */
-            }
-            .form-actions button:not(:last-child) {
-                margin-bottom: 0.75rem; /* Adjusted margin */
-            }
-        }
-
-        @media (min-width: 769px) { /* Hide mobile toggle on larger screens */
-            #dashboardMobileMenuToggle {
                 display: none;
+                flex-direction: column; position: absolute;
+                top: calc(100% + 0.5rem); right: 0;
+                background-color: #1f2937; width: 200px;
+                border-radius: 0.375rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                padding: 0.5rem 0; z-index: 1000;
             }
-            .site-header nav ul { /* Ensure ul is shown directly on desktop */
-                display: flex !important; /* Override inline style if JS sets display:none */
-                position: static;
-                width: auto;
-                background-color: transparent;
-                box-shadow: none;
-                padding: 0;
-                flex-direction: row;
-            }
-            .site-header nav ul li {
-              width: auto;
-            }
+            .site-header nav ul.mobile-menu-active { display: flex; }
+            .site-header nav ul li { margin-left: 0; width: 100%; }
             .site-header nav ul li a {
-              padding: 0.5rem 1rem;
-              border-bottom: none;
+                text-align: left; padding: 0.75rem 1rem;
+                border-bottom: 1px solid #374151;
             }
+            .site-header nav ul li:last-child a { border-bottom: none; }
+
+            .form-actions { flex-direction: column; }
+            .form-actions button { width: 100%; }
+            .form-actions button:not(:last-child) { margin-bottom: 0.75rem; }
         }
 
+        @media (min-width: 769px) {
+            #dashboardMobileMenuToggle { display: none; }
+            .site-header nav ul {
+                display: flex !important; position: static;
+                width: auto; background-color: transparent;
+                box-shadow: none; padding: 0; flex-direction: row;
+            }
+            .site-header nav ul li { width: auto; }
+            .site-header nav ul li a { padding: 0.5rem 1rem; border-bottom: none; }
+        }
 
         @media (max-width: 480px) {
-            #loginPageSection .login-container { padding: 1.5rem; }
-            #loginPageSection .login-container h2 { font-size: 1.75rem; }
-
-            .form-group input[type="text"],
-            .form-group input[type="password"],
-            button { /* General inputs and buttons */
-                font-size: 0.9375rem;
-                padding: 0.625rem;
-            }
-
+            .login-container { padding: 20px; margin: 20px; }
+            #loginPageSection h2 { font-size: 1.75em; }
+            .form-group input, button { font-size: 0.9375rem; padding: 0.625rem; }
             #dashboardPageSection .dashboard-content-area h2.welcome-message { font-size: 1.5rem; }
-            .slider-section h3, .vehicle-info-section h3 {
-                font-size: 1.125rem;
-                padding-top: 10px;
-             }
+            .slider-section h3, .vehicle-info-section h3 { font-size: 1.25rem; }
         }
     </style>
 </head>
@@ -434,22 +403,37 @@
 
     <!-- LOGIN PAGE SECTION -->
     <div id="loginPageSection" class="page-section">
-        <div class="content-wrapper">
-            <div class="login-container">
-                <h2>Login</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit">Login</button>
-                    <p id="loginMessageElement" class="message"></p>
-                </form>
-            </div>
+        <div class="login-container" id="loginFormContainer">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit">Login</button>
+                <p id="loginMessageElement" class="message"></p>
+                <a id="showForgotPassLink" class="interactive-link">Forgot Password?</a>
+            </form>
+        </div>
+        
+        <!-- FORGOT PASSWORD SECTION (Initially hidden) -->
+        <div id="forgotPasswordContainer" class="login-container" style="display: none;">
+            <h2>Account Recovery</h2>
+            <form id="recoveryForm">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="phoneNumber">Phone Number / Email:</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone or email" required>
+                </div>
+                <button type="submit">
+                    Send Recovery Code
+                </button>
+                <p class="message" id="recoveryMessage"></p>
+                <a id="showLoginLink" class="interactive-link">Back to Login</a>
+            </form>
         </div>
     </div>
 
@@ -459,17 +443,15 @@
             <div class="container">
                 <h1>auto care service</h1>
                 <nav>
-                    <button id="dashboardMobileMenuToggle" class="md:hidden"> <!-- Hidden on medium screens and up -->
-                        <i class="fas fa-bars"></i> <!-- Font Awesome Bars Icon -->
+                    <button id="dashboardMobileMenuToggle" class="md:hidden">
+                        <i class="fas fa-bars"></i>
                     </button>
-                    <ul id="dashboardNavigationMenu"> <!-- Initially hidden on small screens, shown by JS -->
-                        <li><a href="#dashboardHome" class="active">Home</a></li> <!-- Link to sections within dashboard or placeholder -->
-                        <li><a href="#dashboardServices">Services</a></li>
-                        <li><a href="#dashboardAbout">About Us</a></li>
-                        <li><a href="#dashboardWhyChooseUs">Why Us</a></li>
-                        <li><a href="#dashboardTestimonials">Testimonials</a></li>
-                        <li><a href="#dashboardContact">Contact</a></li>
-                        <li><a href="#" id="dashboardNavProfile">Profile</a></li>
+                    <ul id="dashboardNavigationMenu">
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Profile</a></li>
                         <li><a href="#" id="dashboardLogoutButton">Logout</a></li>
                     </ul>
                 </nav>
@@ -477,7 +459,7 @@
         </header>
 
         <main class="dashboard-content-area">
-            <div class="container"> <!-- Inner container for content -->
+            <div class="container">
                 <h2 class="welcome-message">Welcome to Your Dashboard, <span id="dashboardUsername">User</span>!</h2>
 
                 <!-- Image Slider Section -->
@@ -485,18 +467,14 @@
                     <h3>Featured Updates</h3>
                     <div class="slider-container">
                         <div class="slide fade">
-                            <img src="https://placehold.co/800x400/6366f1/ffffff?text=Exciting+Service+Offer!" alt="Slide 1 - Service Offer">
-                            <div class="slide-caption">Exciting New Service Offer Available!</div>
+                            <img src="https://placehold.co/800x400/6366f1/ffffff?text=Exciting+Service+Offer!" alt="Slide 1">
                         </div>
                         <div class="slide fade">
-                            <img src="https://placehold.co/800x400/f59e0b/ffffff?text=Maintenance+Tips" alt="Slide 2 - Maintenance Tips">
-                            <div class="slide-caption">Top Maintenance Tips for Your Vehicle</div>
+                            <img src="https://placehold.co/800x400/f59e0b/ffffff?text=Maintenance+Tips" alt="Slide 2">
                         </div>
                         <div class="slide fade">
-                            <img src="https://placehold.co/800x400/10b981/ffffff?text=Community+Event" alt="Slide 3 - Community Event">
-                            <div class="slide-caption">Join Our Next Community Auto Care Event</div>
+                            <img src="https://placehold.co/800x400/10b981/ffffff?text=Community+Event" alt="Slide 3">
                         </div>
-
                         <a class="prev" onclick="spaPlusSlides(-1)">❮</a>
                         <a class="next" onclick="spaPlusSlides(1)">❯</a>
                     </div>
@@ -506,68 +484,51 @@
                         <span class="dot" onclick="spaCurrentSlide(3)"></span>
                     </div>
                 </section>
-                 <div class="container mx-auto text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 animate-slide-up rounded-md p-2">Our Services</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in">
-                    <img src="https://placehold.co/100x100/b2e0e0/333333?text=Engine" alt="Engine Repair" class="mx-auto mb-4 rounded-full">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Engine Diagnostics & Repair</h3>
-                    <p class="text-gray-600">Comprehensive engine checks and expert repairs to keep your vehicle running smoothly.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.1s;">
-                    <img src="https://placehold.co/100x100/c7e9b0/333333?text=Oil" alt="Oil Change" class="mx-auto mb-4 rounded-full">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Oil Change & Fluid Check</h3>
-                    <p class="text-gray-600">Regular oil changes and fluid top-ups for optimal performance and longevity.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.2s;">
-                    <img src="https://placehold.co/100x100/f7d9c4/333333?text=Brakes" alt="Brake Service" class="mx-auto mb-4 rounded-full">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Brake System Service</h3>
-                    <p class="text-gray-600">Ensure your safety with our thorough brake inspections and reliable repair services.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.3s;">
-                    <img src="https://placehold.co/100x100/d4e6f1/333333?text=Tires" alt="Tire Services" class="mx-auto mb-4 rounded-full">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Tire Rotation & Alignment</h3>
-                    <p class="text-gray-600">Extend tire life and improve handling with our professional tire services.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.4s;">
-                    <img src="https://placehold.co/100x100/e0c6e0/333333?text=AC" alt="AC Service" class="mx-auto mb-4 rounded-full">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">AC System Recharge & Repair</h3>
-                    <p class="text-gray-600">Stay cool and comfortable with our expert AC system maintenance and repairs.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in" style="transition-delay: 0.5s;">
-                    <img src="https://placehold.co/100x100/f2e8c4/333333?text=Battery" alt="Battery Check" class="mx-auto mb-4 rounded-full">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Battery Check & Replacement</h3>
-                    <p class="text-gray-600">Reliable battery testing and replacement services to ensure your vehicle starts every time.</p>
-                </div>
-            </div>
-        </div>
+                
+                <!-- Services Section (using Tailwind) -->
+                 <section class="services-section">
+                    <div class="container mx-auto text-center">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 animate-slide-up rounded-md p-2">Our Services</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105">
+                                <h3 class="text-xl font-semibold text-gray-700 mb-2">Engine Repair</h3>
+                                <p class="text-gray-600">Expert diagnostics and repairs.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105">
+                                <h3 class="text-xl font-semibold text-gray-700 mb-2">Oil Change</h3>
+                                <p class="text-gray-600">Optimal performance and longevity.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105">
+                                <h3 class="text-xl font-semibold text-gray-700 mb-2">Brake Service</h3>
+                                <p class="text-gray-600">Thorough inspections and repairs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- Vehicle Information Section -->
                 <section class="vehicle-info-section">
                     <h3>Your Vehicle Details</h3>
-
                     <div id="vehicleDetailsDisplay" style="display: none;" class="vehicle-card">
                         <p><strong>Type:</strong> <span id="displayVehicleType"></span></p>
                         <p><strong>Model:</strong> <span id="displayVehicleModel"></span></p>
                         <p><strong>Number:</strong> <span id="displayVehicleNumber"></span></p>
                         <button id="editVehicleBtn" class="button-secondary small-btn">Edit Details</button>
                     </div>
-
-                    <p id="noVehicleMessage" style="display: block;">You have not added any vehicle details yet.</p>
+                    <p id="noVehicleMessage">You have not added any vehicle details yet.</p>
                     <button id="showAddVehicleFormBtn" class="button-primary small-btn">Add Vehicle</button>
-
                     <form id="addVehicleForm" style="display:none;">
                         <h4>Add/Edit Vehicle</h4>
                         <div class="form-group">
-                            <label for="vehicleType">Vehicle Type (e.g., Car, Bike):</label>
-                            <input type="text" id="vehicleType" name="vehicleType" placeholder="e.g., Sedan, SUV, Motorcycle" required>
+                            <label for="vehicleType">Vehicle Type:</label>
+                            <input type="text" id="vehicleType" name="vehicleType" placeholder="e.g., Sedan, SUV" required>
                         </div>
                         <div class="form-group">
                             <label for="modelName">Model Name:</label>
-                            <input type="text" id="modelName" name="modelName" placeholder="e.g., Toyota Camry, Honda CBR" required>
+                            <input type="text" id="modelName" name="modelName" placeholder="e.g., Toyota Camry" required>
                         </div>
                         <div class="form-group">
-                            <label for="vehicleNumber">Vehicle Number (Plate):</label>
+                            <label for="vehicleNumber">Vehicle Number:</label>
                             <input type="text" id="vehicleNumber" name="vehicleNumber" placeholder="e.g., ABC-123" required>
                         </div>
                         <div class="form-actions">
@@ -576,6 +537,33 @@
                         </div>
                     </form>
                     <p id="vehicleFormMessage" class="message"></p>
+                </section>
+                
+                 <!-- Contact Section (using Tailwind) -->
+                <section class="contact-section">
+                    <div class="container mx-auto text-center">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 animate-slide-up rounded-md p-2">Get in Touch</h2>
+                        <div class="flex flex-col lg:flex-row gap-12 items-center justify-center">
+                            <div class="lg:w-1/2 bg-white p-8 rounded-lg shadow-lg">
+                                <h3 class="text-2xl font-semibold text-gray-800 mb-6">Book Your Service</h3>
+                                <form class="space-y-4">
+                                    <input type="text" class="shadow appearance-none border rounded-md w-full py-3 px-4" placeholder="Your Name" required>
+                                    <input type="email" class="shadow appearance-none border rounded-md w-full py-3 px-4" placeholder="your@example.com" required>
+                                    <textarea rows="4" class="shadow appearance-none border rounded-md w-full py-3 px-4" placeholder="Your message..."></textarea>
+                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md">
+                                        Submit Request
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="lg:w-1/2 text-center lg:text-left">
+                                <h3 class="text-2xl font-semibold text-gray-800 mb-6">Our Location</h3>
+                                <p class="text-gray-700 mb-4">123 Auto Lane, Service City, 12345</p>
+                                <div class="mt-8 rounded-lg overflow-hidden shadow-lg">
+                                    <img src="https://placehold.co/600x300/aed6f1/333333?text=Find+Us+On+Map" alt="Location Map" class="w-full h-auto">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
         </main>
@@ -589,21 +577,25 @@
 
     
     <script>
-        // --- Combined JavaScript (login_script.js + dashboard_script.js + SPA logic) ---
         document.addEventListener('DOMContentLoaded', function() {
             // --- Page Sections ---
             const loginPageSection = document.getElementById('loginPageSection');
             const dashboardPageSection = document.getElementById('dashboardPageSection');
 
-            // --- Login Page Elements ---
+            // --- Login & Recovery Elements ---
+            const loginFormContainer = document.getElementById('loginFormContainer');
             const loginForm = document.getElementById('loginForm');
             const loginMessageElement = document.getElementById('loginMessageElement');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
-            
+            const showForgotPassLink = document.getElementById('showForgotPassLink');
+            const forgotPasswordContainer = document.getElementById('forgotPasswordContainer');
+            const showLoginLink = document.getElementById('showLoginLink');
+            const recoveryForm = document.getElementById('recoveryForm');
+            const recoveryMessage = document.getElementById('recoveryMessage');
+
             // --- Dashboard Page Elements ---
             const dashboardUsernameSpan = document.getElementById('dashboardUsername');
-            // Vehicle Info (ensure these IDs exist in the vehicle-info-section)
             const vehicleDetailsDisplay = document.getElementById('vehicleDetailsDisplay');
             const displayVehicleType = document.getElementById('displayVehicleType');
             const displayVehicleModel = document.getElementById('displayVehicleModel');
@@ -621,14 +613,10 @@
             const dashboardMobileMenuToggle = document.getElementById('dashboardMobileMenuToggle');
             const dashboardNavigationMenu = document.getElementById('dashboardNavigationMenu');
 
-
-            const localStorageKeyVehicle = 'userVehicleDetails_spa_v2'; // Unique key
+            const localStorageKeyVehicle = 'userVehicleDetails_spa_v3';
 
             // Update footer year
-            const currentYearSpan = document.getElementById('currentYear');
-            if (currentYearSpan) {
-                currentYearSpan.textContent = new Date().getFullYear();
-            }
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
 
             // --- SPA Navigation Logic ---
             function showPage(pageId) {
@@ -639,111 +627,106 @@
                     loginPageSection.style.display = 'flex';
                 } else if (pageId === 'dashboard') {
                     dashboardPageSection.style.display = 'flex';
-                    spaLoadVehicleDetails(); // Load vehicle details when dashboard is shown
-                    if (document.getElementsByClassName("slide").length > 0) { // Check if slides exist
-                        spaShowSlides(spaSlideIndex); // Initialize slider when dashboard is shown
+                    spaLoadVehicleDetails();
+                    if (document.getElementsByClassName("slide").length > 0) {
+                        spaShowSlides(spaSlideIndex);
                     }
                 }
             }
+            
+            // Function to show messages
+            function showMessage(element, message, type) {
+                element.textContent = message;
+                element.className = `message ${type}`;
+                setTimeout(() => {
+                    element.textContent = '';
+                    element.className = 'message';
+                }, 5000);
+            }
 
-            // --- Login Logic ---
+            // --- Login and Recovery Logic ---
             if (loginForm) {
                 loginForm.addEventListener('submit', function(event) {
                     event.preventDefault();
                     const username = usernameInput.value.trim();
                     const password = passwordInput.value.trim();
 
-                    loginMessageElement.textContent = '';
-                    loginMessageElement.className = 'message';
-
                     if (username === 'user' && password === 'password') {
-                        loginMessageElement.textContent = `Login successful for ${username}! Redirecting...`;
-                        loginMessageElement.classList.add('success');
-                        if (dashboardUsernameSpan) dashboardUsernameSpan.textContent = username;
-
+                        showMessage(loginMessageElement, `Login successful! Redirecting...`, 'success');
+                        dashboardUsernameSpan.textContent = username;
                         setTimeout(() => {
                             showPage('dashboard');
-                            loginMessageElement.textContent = '';
                             loginForm.reset();
                         }, 1500);
-                    } else if (!username || !password) {
-                        loginMessageElement.textContent = 'Please enter both username and password.';
-                        loginMessageElement.classList.add('error');
                     } else {
-                        loginMessageElement.textContent = 'Invalid username or password. Please try again.';
-                        loginMessageElement.classList.add('error');
-                    }
-
-                    if (loginMessageElement.classList.contains('error')) {
-                        setTimeout(() => {
-                            loginMessageElement.textContent = '';
-                            loginMessageElement.className = 'message';
-                        }, 5000);
+                        showMessage(loginMessageElement, 'Invalid username or password.', 'error');
                     }
                 });
             }
 
-            // --- Dashboard Logout Logic ---
+            if (showForgotPassLink) {
+                showForgotPassLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loginFormContainer.style.display = 'none';
+                    forgotPasswordContainer.style.display = 'block';
+                });
+            }
+            
+            if (showLoginLink) {
+                showLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    forgotPasswordContainer.style.display = 'none';
+                    loginFormContainer.style.display = 'block';
+                });
+            }
+
+            if(recoveryForm) {
+                recoveryForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Placeholder for recovery logic
+                    showMessage(recoveryMessage, 'A recovery link has been sent (simulation).', 'success');
+                });
+            }
+
+            // --- Dashboard Logic ---
             if (dashboardLogoutButton) {
                 dashboardLogoutButton.addEventListener('click', function(event) {
                     event.preventDefault();
-                    if (dashboardUsernameSpan) dashboardUsernameSpan.textContent = "User";
+                    dashboardUsernameSpan.textContent = "User";
                     showPage('login');
-                    // Hide mobile menu if open
                     if (dashboardNavigationMenu) dashboardNavigationMenu.classList.remove('mobile-menu-active');
                 });
             }
 
-            // --- Dashboard Mobile Menu Toggle ---
-            if (dashboardMobileMenuToggle && dashboardNavigationMenu) {
+            if (dashboardMobileMenuToggle) {
                 dashboardMobileMenuToggle.addEventListener('click', function() {
                     dashboardNavigationMenu.classList.toggle('mobile-menu-active');
                 });
-                // Optional: Close menu if a nav link is clicked
-                dashboardNavigationMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                            // For actual SPA navigation, you might prevent default and load content
-                            // For now, just close the menu if it's a real link or placeholder
-                        if (link.getAttribute('href') !== '#' || link.id === 'dashboardLogoutButton' || link.id === 'dashboardNavProfile') {
-                               dashboardNavigationMenu.classList.remove('mobile-menu-active');
-                        }
-                    });
-                });
             }
 
-
-            // --- Image Slider Logic (Dashboard - prefixed with spa) ---
+            // --- Image Slider Logic ---
             let spaSlideIndex = 1;
-
-            window.spaPlusSlides = function(n) {
-                spaShowSlides(spaSlideIndex += n);
-            }
-
-            window.spaCurrentSlide = function(n) {
-                spaShowSlides(spaSlideIndex = n);
-            }
+            window.spaPlusSlides = n => spaShowSlides(spaSlideIndex += n);
+            window.spaCurrentSlide = n => spaShowSlides(spaSlideIndex = n);
 
             function spaShowSlides(n) {
-                let i;
                 let slides = dashboardPageSection.getElementsByClassName("slide");
                 let dots = dashboardPageSection.getElementsByClassName("dot");
                 if (n > slides.length) { spaSlideIndex = 1 }
                 if (n < 1) { spaSlideIndex = slides.length }
-                for (i = 0; i < slides.length; i++) {
+                for (let i = 0; i < slides.length; i++) {
                     slides[i].style.display = "none";
                 }
-                for (i = 0; i < dots.length; i++) {
+                for (let i = 0; i < dots.length; i++) {
                     dots[i].className = dots[i].className.replace(" active-dot", "");
                 }
-                if (slides.length > 0) { // Only try to display if slides exist
+                if (slides.length > 0) {
                     slides[spaSlideIndex-1].style.display = "block";
                     dots[spaSlideIndex-1].className += " active-dot";
                 }
             }
 
             // --- Vehicle Details Logic ---
-
-            // Function to load vehicle details from local storage and update UI
             function spaLoadVehicleDetails() {
                 const vehicleDetails = JSON.parse(localStorage.getItem(localStorageKeyVehicle));
                 if (vehicleDetails) {
@@ -753,49 +736,31 @@
                     vehicleDetailsDisplay.style.display = 'block';
                     noVehicleMessage.style.display = 'none';
                     showAddVehicleFormBtn.style.display = 'none';
-                    addVehicleForm.style.display = 'none'; // Hide form if details are displayed
+                    addVehicleForm.style.display = 'none';
                 } else {
                     vehicleDetailsDisplay.style.display = 'none';
                     noVehicleMessage.style.display = 'block';
                     showAddVehicleFormBtn.style.display = 'block';
-                    addVehicleForm.style.display = 'none'; // Ensure form is hidden
+                    addVehicleForm.style.display = 'none';
                 }
             }
 
-            // Function to save vehicle details to local storage
             function spaSaveVehicleDetails(type, model, number) {
                 const vehicleDetails = { type, model, number };
                 localStorage.setItem(localStorageKeyVehicle, JSON.stringify(vehicleDetails));
-                spaLoadVehicleDetails(); // Refresh the display
+                spaLoadVehicleDetails();
                 showMessage(vehicleFormMessage, 'Vehicle details saved successfully!', 'success');
-                setTimeout(() => {
-                    vehicleFormMessage.textContent = '';
-                    vehicleFormMessage.className = 'message';
-                }, 3000);
             }
 
-            // Function to show messages
-            function showMessage(element, message, type) {
-                element.textContent = message;
-                element.className = `message ${type}`;
-            }
-
-            // Event listener for "Add Vehicle" button
             if (showAddVehicleFormBtn) {
                 showAddVehicleFormBtn.addEventListener('click', function() {
                     noVehicleMessage.style.display = 'none';
                     showAddVehicleFormBtn.style.display = 'none';
                     addVehicleForm.style.display = 'block';
-                    // Clear form fields for new entry
-                    vehicleTypeInput.value = '';
-                    modelNameInput.value = '';
-                    vehicleNumberInput.value = '';
-                    vehicleFormMessage.textContent = '';
-                    vehicleFormMessage.className = 'message';
+                    addVehicleForm.reset();
                 });
             }
 
-            // Event listener for "Edit Details" button
             if (editVehicleBtn) {
                 editVehicleBtn.addEventListener('click', function() {
                     const vehicleDetails = JSON.parse(localStorage.getItem(localStorageKeyVehicle));
@@ -806,22 +771,16 @@
                     }
                     vehicleDetailsDisplay.style.display = 'none';
                     addVehicleForm.style.display = 'block';
-                    vehicleFormMessage.textContent = '';
-                    vehicleFormMessage.className = 'message';
                 });
             }
 
-            // Event listener for "Cancel" button in the form
             if (cancelAddVehicleBtn) {
                 cancelAddVehicleBtn.addEventListener('click', function() {
                     addVehicleForm.style.display = 'none';
-                    spaLoadVehicleDetails(); // Re-load to show existing details or "Add Vehicle" button
-                    vehicleFormMessage.textContent = '';
-                    vehicleFormMessage.className = 'message';
+                    spaLoadVehicleDetails();
                 });
             }
 
-            // Event listener for "Save Vehicle" form submission
             if (addVehicleForm) {
                 addVehicleForm.addEventListener('submit', function(event) {
                     event.preventDefault();
@@ -831,13 +790,9 @@
 
                     if (type && model && number) {
                         spaSaveVehicleDetails(type, model, number);
-                        addVehicleForm.style.display = 'none'; // Hide form after saving
+                        addVehicleForm.style.display = 'none';
                     } else {
                         showMessage(vehicleFormMessage, 'Please fill in all vehicle details.', 'error');
-                        setTimeout(() => {
-                            vehicleFormMessage.textContent = '';
-                            vehicleFormMessage.className = 'message';
-                        }, 5000);
                     }
                 });
             }

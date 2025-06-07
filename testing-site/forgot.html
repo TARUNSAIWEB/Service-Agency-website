@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Recovery</title>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
+            margin: 0;
+            padding: 1rem; /* p-4 */
+            display: flex;
+            align-items: center; /* items-center */
+            justify-content: center; /* justify-center */
+            min-height: 100vh; /* min-h-screen */
+        }
+
+        /* Main content wrapper for centering forms */
+        .content-wrapper {
+            width: 100%; /* w-full */
+            max-width: 28rem; /* max-w-md */
+        }
+
+        /* Shared container for the forms */
+        .form-container {
+            background-color: #ffffff; /* bg-white */
+            padding: 2rem; /* p-8 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            width: 100%; /* w-full */
+        }
+
+        /* Utility class to hide elements */
+        .hidden {
+            display: none;
+        }
+
+        h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 1.5rem; /* mb-6 */
+            color: #1f2937; /* text-gray-800 */
+            text-align: center; /* text-center */
+        }
+
+        p {
+            margin-bottom: 1rem; /* mb-4 */
+            color: #4b5563; /* text-gray-600 */
+            text-align: center; /* text-center */
+        }
+
+        /* Form group styling */
+        .form-group {
+            margin-bottom: 1rem; /* mb-4 for login, mb-6 for recovery to match original */
+        }
+
+        /* Label styling */
+        .form-group label {
+            display: block; /* block */
+            color: #374151; /* text-gray-700 */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+
+        /* Input styling */
+        .form-group input {
+            width: 100%; /* w-full */
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            border: 1px solid #d1d5db; /* border border-gray-300 */
+            border-radius: 0.25rem; /* rounded-md */
+            box-sizing: border-box; /* Ensures padding doesn't increase width */
+        }
+
+        .form-group input:focus {
+            outline: none; /* focus:outline-none */
+            border-color: #3b82f6; /* focus:ring-blue-500 */
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* focus:ring-2 focus:ring-blue-500 */
+        }
+
+        /* Button styling */
+        button {
+            width: 100%; /* w-full */
+            background-color: #2563eb; /* bg-blue-600 */
+            color: white; /* text-white */
+            padding: 0.75rem 0; /* py-3 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 600; /* font-semibold */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* transition duration-300 ease-in-out */
+        }
+
+        button:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-700 */
+        }
+
+        button:focus {
+            outline: none; /* focus:outline-none */
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5), 0 0 0 4px rgba(59, 130, 246, 0.5); /* focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 */
+        }
+
+        /* Link Styling */
+        .interactive-link {
+            display: block; /* block */
+            margin-top: 1rem; /* mt-4 */
+            font-size: 0.875rem; /* text-sm */
+            color: #2563eb; /* text-blue-600 */
+            text-align: center; /* text-center */
+            cursor: pointer; /* cursor-pointer */
+            text-decoration: none;
+        }
+
+        .interactive-link:hover {
+            text-decoration: underline; /* hover:underline */
+        }
+
+        /* Message Box Styling */
+        .message-box {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+        }
+        .message-box.show {
+            display: block;
+        }
+
+        /* Message text within message box */
+        #messageText {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 500; /* font-medium */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+
+        #messageText.text-green-600 {
+            color: #16a34a; /* Tailwind's green-600 */
+        }
+
+        #messageText.text-red-600 {
+            color: #dc2626; /* Tailwind's red-600 */
+        }
+
+        #messageText.text-gray-800 {
+            color: #1f2937; /* Tailwind's gray-800 */
+        }
+
+        /* Button inside message box */
+        #closeMessageBox {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: white;
+            padding: 0.5rem 1.5rem; /* py-2 px-6 */
+            border-radius: 0.375rem; /* rounded-md */
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #closeMessageBox:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-700 */
+        }
+        #closeMessageBox:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main content wrapper for centering forms -->
+    <div class="content-wrapper">
+
+        <!-- LOGIN PAGE SECTION -->
+        <div id="loginContainer" class="form-container">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;"> <!-- Keeping original mb-6 equivalent -->
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit">
+                    Login
+                </button>
+                <a id="showForgotPassLink" class="interactive-link">Forgot Password?</a>
+            </form>
+        </div>
+
+        <!-- FORGOT PASSWORD SECTION (Initially hidden) -->
+        <div id="forgotPasswordContainer" class="form-container hidden">
+            <h2>Account Recovery</h2>
+            <p>Enter your phone number to begin.</p>
+            <form id="recoveryForm">
+                <div class="form-group" style="margin-bottom: 1.5rem;"> <!-- Keeping original mb-6 equivalent -->
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
+                </div>
+                <button type="submit">
+                    Send Recovery Code
+                </button>
+                <a id="showLoginLink" class="interactive-link">Back to Login</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Message Box Element -->
+    <div id="messageBox" class="message-box">
+        <p id="messageText"></p>
+        <button id="closeMessageBox">OK</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Get all the necessary elements ---
+            const loginContainer = document.getElementById('loginContainer');
+            const forgotPasswordContainer = document.getElementById('forgotPasswordContainer');
+            
+            const showForgotPassLink = document.getElementById('showForgotPassLink');
+            const showLoginLink = document.getElementById('showLoginLink');
+
+            const loginForm = document.getElementById('loginForm');
+            const recoveryForm = document.getElementById('recoveryForm');
+            
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            const closeMessageBox = document.getElementById('closeMessageBox');
+
+            // --- Helper function to display messages ---
+            function showMessage(message, type) {
+                messageText.textContent = message;
+                // Clear previous message classes
+                messageText.classList.remove('text-green-600', 'text-red-600', 'text-gray-800'); 
+                
+                if (type === 'success') {
+                    messageText.classList.add('text-green-600');
+                } else if (type === 'error') {
+                    messageText.classList.add('text-red-600');
+                } else {
+                    messageText.classList.add('text-gray-800'); // Default color
+                }
+                messageBox.classList.add('show');
+            }
+
+            // --- Helper function to hide messages ---
+            function hideMessage() {
+                messageBox.classList.remove('show');
+            }
+
+            // Close message box on OK button click
+            closeMessageBox.addEventListener('click', hideMessage);
+
+            // --- Event Listeners to switch between forms ---
+            // When "Forgot Password?" is clicked
+            showForgotPassLink.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent link from navigating
+                loginContainer.classList.add('hidden');
+                forgotPasswordContainer.classList.remove('hidden');
+                hideMessage(); // Clear any existing messages
+            });
+
+            // When "Back to Login" is clicked
+            showLoginLink.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent link from navigating
+                forgotPasswordContainer.classList.add('hidden');
+                loginContainer.classList.remove('hidden');
+                hideMessage(); // Clear any existing messages
+            });
+
+            // --- Form Submission Logic ---
+
+            // Login form submission
+            loginForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent actual form submission
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                // Simulate a server check
+                if (username === 'user' && password === 'pass') {
+                    showMessage('Login successful! Redirecting...', 'success');
+                    // In a real application, you would redirect here
+                } else {
+                    showMessage('Invalid username or password.', 'error');
+                }
+            });
+
+            // Recovery form submission
+            recoveryForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent actual form submission
+
+                const phoneNumber = document.getElementById('phoneNumber').value;
+
+                if (phoneNumber.trim() === '') {
+                    showMessage('Please enter a phone number.', 'error');
+                    return;
+                }
+
+                // Simulate sending a recovery code
+                console.log(`Recovery requested for phone number: ${phoneNumber}`);
+                showMessage('If an account exists, a recovery code has been sent.', 'success');
+                
+                recoveryForm.reset(); // Clear the form
+            });
+        });
+    </script>
+
+</body>
+</html>

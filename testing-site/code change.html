@@ -1,0 +1,159 @@
+/* CSS for the "Our Services" section, translating Tailwind classes */
+
+/* Styles for the main section container:
+   HTML: <section id="services" class="py-16 px-4 bg-gray-100">
+*/
+#services {
+    padding-top: 4rem;    /* Equivalent to py-16 */
+    padding-bottom: 4rem; /* Equivalent to py-16 */
+    padding-left: 1rem;   /* Equivalent to px-4 */
+    padding-right: 1rem;  /* Equivalent to px-4 */
+    background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
+    /* The margin-bottom: 2rem from the previous global style for #services might still be desired
+       or you can add it here if this #services rule replaces the old one. */
+}
+
+/* Styles for the inner container:
+   HTML: <div class="container mx-auto text-center">
+   Assumes a global .container style like:
+   .container { width: 90%; max-width: 1100px; margin: 0 auto; padding: 0 15px; }
+   The snippet adds text-center.
+*/
+#services .container { /* Targeting .container specifically within #services */
+    /* max-width, width, padding are assumed from a global .container if it exists.
+       If not, you'd add them here:
+       max-width: 1100px; (example)
+       width: 90%; (example)
+       padding-left: 15px; (example)
+       padding-right: 15px; (example)
+    */
+    margin-left: auto;  /* Equivalent to mx-auto */
+    margin-right: auto; /* Equivalent to mx-auto */
+    text-align: center; /* Equivalent to text-center */
+}
+
+/* Styles for the section title:
+   HTML: <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 animate-slide-up rounded-md p-2">
+*/
+#services h2.text-3xl { /* Targeting the h2 with its specific class for precision */
+    font-size: 1.875rem;      /* Equivalent to text-3xl */
+    line-height: 2.25rem;     /* Default line-height for text-3xl */
+    font-weight: 700;         /* Equivalent to font-bold */
+    color: #1f2937;           /* Equivalent to text-gray-800 */
+    margin-bottom: 3rem;      /* Equivalent to mb-12 (12 * 0.25rem) */
+    border-radius: 0.375rem;  /* Equivalent to rounded-md */
+    padding: 0.5rem;          /* Equivalent to p-2 (2 * 0.25rem) */
+    /* The 'animate-slide-up' class should trigger animation defined elsewhere */
+}
+
+/* Responsive styling for the section title */
+@media (min-width: 640px) { /* sm: breakpoint */
+    #services h2.text-3xl { /* sm:text-4xl */
+        font-size: 2.25rem;   /* Equivalent to text-4xl */
+        line-height: 2.5rem;  /* Default line-height for text-4xl */
+    }
+}
+
+/* Styles for the grid container:
+   HTML: <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+*/
+#services .grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr)); /* Equivalent to grid-cols-1 */
+    gap: 2rem; /* Equivalent to gap-8 (8 * 0.25rem) */
+}
+
+/* Responsive grid columns */
+@media (min-width: 640px) { /* sm: breakpoint */
+    #services .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* Equivalent to sm:grid-cols-2 */
+    }
+}
+@media (min-width: 1024px) { /* lg: breakpoint */
+    #services .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)); /* Equivalent to lg:grid-cols-3 */
+    }
+}
+
+/* Styles for individual service cards:
+   HTML: <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 animate-fade-in service-card">
+*/
+#services .service-card { /* Using the custom 'service-card' class for targeting */
+    background-color: #ffffff; /* Equivalent to bg-white */
+    padding: 1.5rem;           /* Equivalent to p-6 (6 * 0.25rem) */
+    border-radius: 0.5rem;     /* Equivalent to rounded-lg */
+    /* Tailwind v3 shadow-lg */
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transition-property: box-shadow, transform; /* For hover effects, Tailwind's 'transition' class implies 'all' by default */
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* Default timing function */
+    transition-duration: 300ms; /* Equivalent to duration-300 */
+    /* The 'animate-fade-in' class should trigger animation defined elsewhere */
+    /* 'transform' class is implicitly handled by hover:scale-105 needing transform property */
+}
+
+#services .service-card:hover {
+    /* Tailwind v3 shadow-xl */
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); /* Equivalent to hover:shadow-xl */
+    transform: scale(1.05); /* Equivalent to hover:scale-105 */
+}
+
+/* Styles for images within service cards:
+   HTML: <img src="..." alt="..." class="mx-auto mb-4 rounded-full">
+*/
+#services .service-card img {
+    display: block; /* Needed for mx-auto to work effectively if not already block */
+    margin-left: auto;
+    margin-right: auto;     /* Equivalent to mx-auto */
+    margin-bottom: 1rem;    /* Equivalent to mb-4 (4 * 0.25rem) */
+    border-radius: 9999px;  /* Equivalent to rounded-full */
+    /* width & height are from placeholder, not Tailwind classes here */
+    /* width: 100px; */
+    /* height: 100px; */
+}
+
+/* Styles for titles (h3) within service cards:
+   HTML: <h3 class="text-xl font-semibold text-gray-700 mb-2">
+*/
+#services .service-card h3 {
+    font-size: 1.25rem;     /* Equivalent to text-xl */
+    line-height: 1.75rem;   /* Default line-height for text-xl */
+    font-weight: 600;       /* Equivalent to font-semibold */
+    color: #374151;         /* Equivalent to text-gray-700 */
+    margin-bottom: 0.5rem;  /* Equivalent to mb-2 (2 * 0.25rem) */
+}
+
+/* Styles for paragraphs within service cards:
+   HTML: <p class="text-gray-600">
+*/
+#services .service-card p {
+    color: #4b5563; /* Equivalent to text-gray-600 */
+    /* Assuming base font size and line height if not specified by other Tailwind classes */
+    font-size: 1rem;        /* Tailwind's default base size */
+    line-height: 1.5rem;    /* Tailwind's default base line-height */
+}
+
+/*
+Note on Animations:
+The classes `animate-slide-up` and `animate-fade-in` in your HTML snippet
+are assumed to be defined with their respective @keyframes elsewhere in your CSS,
+for example:
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+The inline `style="animation-delay: 0.Xs;"` on some cards will continue to work
+with the .animate-fade-in class.
+*/ 
